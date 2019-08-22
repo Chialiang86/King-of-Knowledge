@@ -28,22 +28,21 @@ namespace Ui {
 class MainWindow;
 }
 
-typedef struct QuestionString{
+typedef struct QuestionString {
     QString str;
     bool legal;
-}QueString;
+} QueString;
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
-public:
+  public:
     explicit MainWindow(QWidget *parent = nullptr,Package::PlayerKey = Package::server);
     void buildBase();
     void openQuestionFile();
     QString newQuestion();
 
-public slots:
+  public slots:
     void connectSettingInit(Package::PlayerKey);
     void accept();
     void parsePackage(const QString&,Package::PlayerKey );
@@ -57,13 +56,13 @@ public slots:
     void getTrueFalse(const QByteArray&);
 
 
-signals:
+  signals:
     void sendNewQuestion(const QString&);//client
     void sendQuestionShow();//client
     void sendConnectSuccess(const QString&);
 
 
-private:
+  private:
     ObjectOutwardInfo *oi;
     MenuWindow *menu;
     Question *q_page;

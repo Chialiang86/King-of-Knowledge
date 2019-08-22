@@ -6,7 +6,7 @@
 #include <QDebug>
 
 namespace Package {
-typedef enum PlayerKeyKind{client,server}PlayerKey;
+typedef enum PlayerKeyKind {client,server} PlayerKey;
 const qint16 port1 = 9999;
 const qint16 port2 = 6666;
 const QString colon = "::";
@@ -24,17 +24,15 @@ const QString title_result   = "result";
 const QString title_gameover = "gameover";
 
 
-class QuestionGenerate : public QWidget
-{
-   Q_OBJECT
-public :
+class QuestionGenerate : public QWidget {
+    Q_OBJECT
+  public :
     QuestionGenerate(QString sub = "", QString que = "",
-                     QString a1 = "",QString a2 = "",QString a3 = "",QString a4 = ""){
+                     QString a1 = "",QString a2 = "",QString a3 = "",QString a4 = "") {
         if(!isEmpty(sub) && !isEmpty(que) && !isEmpty(a1) &&
-           !isEmpty(a2)  && !isEmpty(a3)  && !isEmpty(a4)){
+                !isEmpty(a2)  && !isEmpty(a3)  && !isEmpty(a4)) {
             clear();
-        }
-        else{
+        } else {
             subject = sub;
             question = que;
             ans[0] = a1;
@@ -45,48 +43,48 @@ public :
         err = "ERROR";
     }
 
-    void clear(){
+    void clear() {
         subject = "";
         question = "";
-        for(int i = 0; i < 4 ; ++i){
+        for(int i = 0; i < 4 ; ++i) {
             ans[i] = "";
         }
     }
-    bool isEmpty(const QString& str){
+    bool isEmpty(const QString& str) {
         if(str == "")
             return true;
         else
             return false;
     }
 
-    void setSubject(const QString sub){
+    void setSubject(const QString sub) {
         subject = sub;
     }
 
-    void setQuestion(const QString& que){
+    void setQuestion(const QString& que) {
         question = que;
     }
 
-    void setAns(const int num,const QString& answer,bool is_true){
-        if(num < 0 || num > 3){
+    void setAns(const int num,const QString& answer,bool is_true) {
+        if(num < 0 || num > 3) {
             QMessageBox::information(this,"error","Illegal q num");
             return ;
-        }else{
-            if(is_true){
+        } else {
+            if(is_true) {
                 ans[num] = true_ans + dot + answer;
-            }else{
+            } else {
                 ans[num] = false_ans + dot + answer;
             }
         }
     }
 
-    QString getQuestionPackage(){
-        if(isEmpty(subject) || isEmpty(question)){
+    QString getQuestionPackage() {
+        if(isEmpty(subject) || isEmpty(question)) {
             QMessageBox::information(this,"error",err + " sub or que");
             return err;
         }
-        for(int i = 0 ; i < 4; ++i){
-            if(ans[i].split(dot).length() != 2){
+        for(int i = 0 ; i < 4; ++i) {
+            if(ans[i].split(dot).length() != 2) {
                 QMessageBox::information(this,"error",err + " a dot");
                 return err;
             }
@@ -101,7 +99,7 @@ public :
         return question_package;
     }
 
-private:
+  private:
     QString ans[4];
     QString question;
     QString subject;
@@ -110,33 +108,32 @@ private:
 };
 
 
-class PackageInfo : public QWidget
-{
+class PackageInfo : public QWidget {
     Q_OBJECT
-public:
+  public:
     QList<QString> title_name;
-    PackageInfo(const QString& pack = ""){
+    PackageInfo(const QString& pack = "") {
         title_name.append(title_question);
         title_name.append(title_next);
         title_name.append(title_connect);
         title_name.append(title_player);
         title_name.append(title_result);
         title_name.append(title_gameover);
-        if(pack != ""){
+        if(pack != "") {
             title = pack.split(colon).at(0);
             instruct = pack.split(colon).at(1).split(end).at(0);
-        }else{
+        } else {
             err = "ERROR";
             title = "";
             instruct = "";
         }
 
     }
-    void setTitle(const QString& t){
+    void setTitle(const QString& t) {
         bool legal = false;
         qDebug() << "Title: " << t << endl;
-        for(int i = 0 ; i < title_name.length(); ++i){
-            if(t == title_name.at(i)){
+        for(int i = 0 ; i < title_name.length(); ++i) {
+            if(t == title_name.at(i)) {
                 legal = true;
                 break;
             }
@@ -148,11 +145,11 @@ public:
     }
 
 
-    void setInstruct(const QString& in){
+    void setInstruct(const QString& in) {
         instruct = in;
     }
 
-    QString getPackage(const QString& t,const QString& in){
+    QString getPackage(const QString& t,const QString& in) {
         QString package;
         setTitle(t);
         setInstruct(in);
@@ -160,60 +157,57 @@ public:
         return package;
     }
 
-    QString getPackage(){
+    QString getPackage() {
         if(!isEmpty(title) && !isEmpty(instruct))
             return title + colon + instruct;
-        else{
+        else {
             QMessageBox::information(this,"error",err + ": empty");
             return err;
         }
     }
 
-    bool isEmpty(const QString& str){
+    bool isEmpty(const QString& str) {
         if(str == "")
             return true;
         else
             return false;
     }
 
-    QString getTitle(){
+    QString getTitle() {
         if(title != "")
             return title;
-        else{
+        else {
             QMessageBox::information(this,"error",err + ":get t");
             return err;
         }
     }
 
-    QString getInstruct(){
+    QString getInstruct() {
         if(instruct != "")
             return instruct;
-        else{
+        else {
             QMessageBox::information(this,"error",err + ":get i");
             return err;
         }
     }
 
-    static QByteArray setPackage(const QString& ti,const QString& in)
-    {
+    static QByteArray setPackage(const QString& ti,const QString& in) {
         PackageInfo client_show;
         QByteArray client_show_msg;
         client_show_msg.append(client_show.getPackage(ti,in));
         return client_show_msg;
     }
-    static QString parseInstruct(const QString& package)
-    {
+    static QString parseInstruct(const QString& package) {
         QString p(package);
         return QString(p.split(colon).at(1));
     }
 
-    static QString parseTitle(const QString& package)
-    {
+    static QString parseTitle(const QString& package) {
         QString p(package);
         return QString(p.split(colon).at(0));
     }
 
-private:
+  private:
     QString err;
     QString title;
     QString instruct;

@@ -1,8 +1,7 @@
 #include "menuwindow.h"
 
 MenuWindow::MenuWindow(QWidget * parent,Package::PlayerKey key) : QWidget(parent)
-  ,player_key(key)
-{
+    ,player_key(key) {
 
     oi = new ObjectOutwardInfo();
     this->resize(oi->menu->w,oi->menu->h);
@@ -16,8 +15,7 @@ MenuWindow::MenuWindow(QWidget * parent,Package::PlayerKey key) : QWidget(parent
 
 }
 
-void MenuWindow::serverActive()
-{
+void MenuWindow::serverActive() {
     player_guide = new QLabel(this);
     player_guide->setGeometry(oi->pname_guide->x,oi->pname_guide->y,oi->pname_guide->w,oi->pname_guide->h);
     player_guide->setFont(*oi->textshow);
@@ -62,8 +60,7 @@ void MenuWindow::serverActive()
 
     connect(start_btn,SIGNAL(clicked()),this,SLOT(startBtnClicked()));
 }
-void MenuWindow::clientActive()
-{
+void MenuWindow::clientActive() {
     player_guide = new QLabel(this);
     player_guide->setGeometry(oi->pname_guide->x,oi->pname_guide->y,oi->pname_guide->w,oi->pname_guide->h);
     player_guide->setFont(*oi->textshow);
@@ -109,7 +106,7 @@ void MenuWindow::clientActive()
     connect(start_btn,SIGNAL(clicked()),this,SLOT(startBtnClicked()));
 }
 
-QString MenuWindow::getPlayerName(){
+QString MenuWindow::getPlayerName() {
     if(player_name->text() != "")
         return player_name->text();
     else {
@@ -117,51 +114,49 @@ QString MenuWindow::getPlayerName(){
     }
 }
 
-void MenuWindow::setIpText(QString& ip_pos){
-    if(player_key == Package::server){
+void MenuWindow::setIpText(QString& ip_pos) {
+    if(player_key == Package::server) {
         ip_show->setText(ip_pos);
         ip_show->update();
     }
 }
 
-void MenuWindow::startBtnClicked(){
-    if(player_key == Package::server){
+void MenuWindow::startBtnClicked() {
+    if(player_key == Package::server) {
         //player_name = player_name->text();
-        if(inputNotEmpty()){
+        if(inputNotEmpty()) {
             this->hide();
             emit ready();
-        }else{
+        } else {
             QMessageBox::warning(this,"nope","illegal input",QMessageBox::Ok);
         }
-    }else{
-        if(inputNotEmpty()){
+    } else {
+        if(inputNotEmpty()) {
             emit sendIPAddr(ip_input->text());
-        }else{
+        } else {
             QMessageBox::warning(this,"nope","illegal input",QMessageBox::Ok);
         }
     }
 }
 
-void MenuWindow::getConnectSuccess(const QString& message)
-{
-    if(player_key == Package::server){
+void MenuWindow::getConnectSuccess(const QString& message) {
+    if(player_key == Package::server) {
         start_guide->setText(message);
         start_guide->show();
         start_btn->show();
-    }else{
+    } else {
         start_guide->setText(message);
         start_btn->hide();
     }
 }
 
-bool MenuWindow::inputNotEmpty()
-{
-    if(player_key == Package::server){
+bool MenuWindow::inputNotEmpty() {
+    if(player_key == Package::server) {
         if(stringEmpty(player_name->text()))
             return false;
         else
             return true;
-    }else{
+    } else {
         if(stringEmpty(player_name->text()) || !ipIsLegal())
             return false;
         else
@@ -169,8 +164,7 @@ bool MenuWindow::inputNotEmpty()
     }
 }
 
-bool MenuWindow::stringEmpty(const QString& str)
-{
+bool MenuWindow::stringEmpty(const QString& str) {
     if(str == "")
         return true;
     else {
@@ -181,8 +175,7 @@ bool MenuWindow::stringEmpty(const QString& str)
     }
 }
 
-bool MenuWindow::ipIsLegal()
-{
+bool MenuWindow::ipIsLegal() {
     QString str_clear_space = "";
     for(int i = 0 ; i < ip_input->text().length(); ++i)
         if(ip_input->text().at(i) != ' ')
@@ -190,9 +183,9 @@ bool MenuWindow::ipIsLegal()
     ip_input->setText(str_clear_space);
     if(str_clear_space.split('.').length() != 4)
         return false;
-    else{
-        for(int i = 0 ; i < 4; ++i){
-            for(int j = 0 ; j < str_clear_space.split('.').at(i).length(); ++j){
+    else {
+        for(int i = 0 ; i < 4; ++i) {
+            for(int j = 0 ; j < str_clear_space.split('.').at(i).length(); ++j) {
                 if( str_clear_space.split('.').at(i).at(j) < 48 ||
                         str_clear_space.split('.').at(i).at(j) > 57)
                     return false;
@@ -202,6 +195,5 @@ bool MenuWindow::ipIsLegal()
     return true;
 }
 
-void MenuWindow::debug()
-{
+void MenuWindow::debug() {
 }

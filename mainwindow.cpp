@@ -2,8 +2,7 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent,Package::PlayerKey key) :
-    QMainWindow(parent),role(key)
-{
+    QMainWindow(parent),role(key) {
     //preprocess
     oi = new ObjectOutwardInfo();//all about pos,size,font,color... info
     this->resize(oi->main->w,oi->main->h);
@@ -25,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent,Package::PlayerKey key) :
     right_dash->initialObject();
     right_dash->show();
 
-    if(role == Package::server){
+    if(role == Package::server) {
         openQuestionFile();
         next_timer = new QTimer();
         next_timer->setInterval(1200);
@@ -54,26 +53,26 @@ MainWindow::MainWindow(QWidget *parent,Package::PlayerKey key) :
 
 }
 
-void MainWindow::openQuestionFile()
-{
+void MainWindow::openQuestionFile() {
     QString path = ":/file/question.txt";
     QFile qin(path);
-    if(qin.open(QIODevice::ReadOnly)){
+    if(qin.open(QIODevice::ReadOnly)) {
         //GOOD;
         QueString temp;
-        while(!qin.atEnd()){
+        while(!qin.atEnd()) {
             temp.str = qin.readLine();
             temp.legal = true;
             question_list.append(temp);
             qDebug() << question_list.back().str;
         }
         qin.close();
-    }else{BAD;}
+    } else {
+        BAD;
+    }
 }
 
-void MainWindow::connectSettingInit(Package::PlayerKey key)
-{
-    if(key == Package::server){
+void MainWindow::connectSettingInit(Package::PlayerKey key) {
+    if(key == Package::server) {
         QString ip;
         QHostInfo host_info = QHostInfo::fromName(QHostInfo::localHostName());
         QHostAddress address = host_info.addresses().first();
@@ -83,14 +82,13 @@ void MainWindow::connectSettingInit(Package::PlayerKey key)
         host = new QTcpServer(this);
         host->listen(QHostAddress::Any,Package::port1);
         connect(host,SIGNAL(newConnection()),this,SLOT(accept()));
-    }else{ //client
+    } else { //client
         client = new QTcpSocket(this);
         connect(client,SIGNAL(readyRead()),this,SLOT(clientGetPackage()));
     }
 }
 
-void MainWindow::getIPAddr(const QString& ip)
-{
+void MainWindow::getIPAddr(const QString& ip) {
     QString addr;
     QHostInfo host_info = QHostInfo::fromName(QHostInfo::localHostName());
     QHostAddress address = host_info.addresses().first();
@@ -102,8 +100,7 @@ void MainWindow::getIPAddr(const QString& ip)
     client->write(PackageInfo::setPackage(Package::title_connect,menu->getPlayerName()));
 }
 
-void MainWindow::accept()
-{
+void MainWindow::accept() {
     //server 2
     client_socket = host->nextPendingConnection();
     connect(client_socket,SIGNAL(readyRead()),this,SLOT(serverGetPackage()));
@@ -111,65 +108,56 @@ void MainWindow::accept()
     emit sendConnectSuccess(message);
 }
 
-void MainWindow::serverGetPackage()
-{
+void MainWindow::serverGetPackage() {
     //server 3
     parsePackage(QString(client_socket->readAll()),role);
 
 }
 
-void MainWindow::clientGetPackage()
-{
+void MainWindow::clientGetPackage() {
     //client 4
-     parsePackage(QString(client->readAll()),role);
+    parsePackage(QString(client->readAll()),role);
 }
 
 
-void MainWindow::parsePackage(const QString& pack,Package::PlayerKey key){
+void MainWindow::parsePackage(const QString& pack,Package::PlayerKey key) {
     Package::PackageInfo pinfo;
     pinfo.setTitle(pack.split(Package::colon).at(0));
     pinfo.setInstruct(pack.split(Package::colon).at(1));
-    if(key == Package::client){
+    if(key == Package::client) {
         qDebug() << " client :" << pinfo.getTitle() << " " << pinfo.getInstruct() << endl;
-        if(pinfo.getTitle() == Package::title_connect){
+        if(pinfo.getTitle() == Package::title_connect) {
             menu->hide();
             this->show();
             left_dash->setPlayerName(menu->getPlayerName());
             right_dash->setPlayerName(pinfo.getInstruct());
             q_page->reset();
-        }
-        else if(pinfo.getTitle() == Package::title_question){
+        } else if(pinfo.getTitle() == Package::title_question) {
             emit sendNewQuestion(pinfo.getInstruct());
-        }
-        else if(pinfo.getTitle() == Package::title_result){
+        } else if(pinfo.getTitle() == Package::title_result) {
             q_page->reset();
-        }
-        else if(pinfo.getTitle() == Package::title_next){
+        } else if(pinfo.getTitle() == Package::title_next) {
             emit sendQuestionShow();
-        }
-        else if(pinfo.getTitle() == Package::title_player){
+        } else if(pinfo.getTitle() == Package::title_player) {
             right_dash->setPlayerScore(pinfo.getInstruct().split(Package::comma).at(1));
-        }
-        else if(pinfo.getTitle() == Package::title_gameover){
+        } else if(pinfo.getTitle() == Package::title_gameover) {
             QString winner = pinfo.getInstruct().split(Package::comma).at(0);
             QString score = pinfo.getInstruct().split(Package::comma).at(1);
             q_page->setGameOverText(winner, score);
         }
-    }else{
+    } else {
         qDebug() << " client :" << pinfo.getTitle() << " " << pinfo.getInstruct() << endl;
-        if(pinfo.getTitle() == Package::title_connect){
+        if(pinfo.getTitle() == Package::title_connect) {
             right_dash->setPlayerName(pinfo.getInstruct());
-        }
-        else if(pinfo.getTitle() == Package::title_player){
+        } else if(pinfo.getTitle() == Package::title_player) {
             right_dash->setPlayerScore(pinfo.getInstruct().split(Package::comma).at(1));
         }
     }
 }
 
-void MainWindow::windowShow()
-{
+void MainWindow::windowShow() {
     //send to client done
-    if(role == Package::server){
+    if(role == Package::server) {
         result_timer->start();
         menu->hide();
         this->show();
@@ -179,8 +167,7 @@ void MainWindow::windowShow()
     }
 }
 
-void MainWindow::nextTimeout() // to question
-{
+void MainWindow::nextTimeout() { // to question
     //send to client done
     emit sendQuestionShow();
     client_socket->write( PackageInfo::setPackage(title_next,"show question"));
@@ -189,8 +176,7 @@ void MainWindow::nextTimeout() // to question
     question_timer->start();
 }
 
-void MainWindow::serverQuestionTimeout() // to result
-{
+void MainWindow::serverQuestionTimeout() { // to result
     //send to client done
     question_timer->stop();
     result_timer->start();
@@ -200,25 +186,24 @@ void MainWindow::serverQuestionTimeout() // to result
 }
 
 
-void MainWindow::resultTimeout() // to next
-{
+void MainWindow::resultTimeout() { // to next
     //send to client
-    if(q_page->getQuestionCounter() < 5){
+    if(q_page->getQuestionCounter() < 5) {
         QString question = newQuestion();
         emit sendNewQuestion(question);
         client_socket->write(PackageInfo::setPackage(title_question,question));
         result_timer->stop();
         next_timer->start();
-    }else{
+    } else {
         result_timer->stop();
-        if(left_dash->getScore().toInt() > right_dash->getScore().toInt()){
+        if(left_dash->getScore().toInt() > right_dash->getScore().toInt()) {
             QString winner_ins = left_dash->getPlayerName() + Package::comma + left_dash->getScore();
             QByteArray winner_info;
             winner_info = PackageInfo::setPackage(Package::title_gameover,winner_ins);
             client_socket->write(winner_info);
             q_page->setGameOverText(left_dash->getPlayerName(), left_dash->getScore());
             qDebug() << winner_info << endl;
-        }else{
+        } else {
             QString winner_ins = right_dash->getPlayerName() + Package::comma + right_dash->getScore();
             QByteArray winner_info;
             winner_info = PackageInfo::setPackage(Package::title_gameover,winner_ins);
@@ -231,16 +216,15 @@ void MainWindow::resultTimeout() // to next
 }
 
 
-void MainWindow::getTrueFalse(const QByteArray& msg)
-{
+void MainWindow::getTrueFalse(const QByteArray& msg) {
     //bi communication
-    if(role == Package::server){
+    if(role == Package::server) {
         QString title = PackageInfo::parseTitle(msg);
         QString ins = PackageInfo::parseInstruct(msg);
         left_dash->setPlayerScore(ins.split(Package::comma).at(1));
         client_socket->write(msg);
 
-    }else{
+    } else {
         QString title = PackageInfo::parseTitle(msg);
         QString ins = PackageInfo::parseInstruct(msg);
         left_dash->setPlayerScore(ins.split(Package::comma).at(1));
@@ -250,22 +234,20 @@ void MainWindow::getTrueFalse(const QByteArray& msg)
 
 
 
-QString MainWindow::newQuestion()
-{
+QString MainWindow::newQuestion() {
     int legal_index;
     QString true_question;
-    do{
+    do {
         legal_index = qrand() % question_list.length();
-    }while(!question_list.at(legal_index).legal);
+    } while(!question_list.at(legal_index).legal);
     question_list[legal_index].legal = false;
     true_question = question_list.at(legal_index).str.split(Package::colon).at(1);
     return true_question;
 }
 
-void MainWindow::buildBase()
-{
-    for(int type = 0 ;type < 2; ++type){
-        for(int t = 0 ; t < 12 ; ++t){
+void MainWindow::buildBase() {
+    for(int type = 0 ; type < 2; ++type) {
+        for(int t = 0 ; t < 12 ; ++t) {
             tone[type][t].tone = music_info::ToneTable[type][t];
             tone[type][t].type = type == 0 ? music_info::flat : music_info::sharp;
         }

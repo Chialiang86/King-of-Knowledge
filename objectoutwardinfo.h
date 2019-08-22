@@ -9,9 +9,8 @@
 #include <QDebug>
 #include "possize.h"
 
-class ObjectOutwardInfo
-{
-public:
+class ObjectOutwardInfo {
+  public:
     ObjectOutwardInfo();
 
     QFont * textshow;

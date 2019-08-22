@@ -9,10 +9,9 @@
 #include "questionbutton.h"
 #include "packageinfo.h"
 
-class MenuWindow : public QWidget
-{
+class MenuWindow : public QWidget {
     Q_OBJECT
-public:
+  public:
     MenuWindow(QWidget *,Package::PlayerKey);
     void debug();
     void setIpText(QString&);
@@ -23,16 +22,16 @@ public:
     bool ipIsLegal();
     QString getPlayerName();
 
-public slots:
+  public slots:
     void startBtnClicked();
     void getConnectSuccess(const QString&);
 
-signals:
+  signals:
     void ready();
     void sendIPAddr(const QString& ip);
 
 
-private :
+  private :
     ObjectOutwardInfo * oi;
     Package::PlayerKey player_key;
 

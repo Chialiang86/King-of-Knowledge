@@ -1,20 +1,19 @@
 #include "objectoutwardinfo.h"
 
-ObjectOutwardInfo::ObjectOutwardInfo()
-{
+ObjectOutwardInfo::ObjectOutwardInfo() {
 
     button_stylesheet = "QPushButton{background-color:rgb(100,100,100); color: rgb(90,200,200);\
             border-radius: 8px;  border: 1px groove gray; border-style: outset;}"
-            "QPushButton:hover{background-color:white; color: black;}"
-            "QPushButton:pressed{background-color:rgb(140,140,140); border-style: inset; }";
+                        "QPushButton:hover{background-color:white; color: black;}"
+                        "QPushButton:pressed{background-color:rgb(140,140,140); border-style: inset; }";
 
     true_stylesheet = "QPushButton{background-color:rgb(100,255,100); color: rgb(90,200,200);\
             border-radius: 8px;  border: 1px groove gray; border-style: outset;}"
-            "QPushButton:pressed{background-color:rgb(140,140,140); border-style: inset; }";
+                      "QPushButton:pressed{background-color:rgb(140,140,140); border-style: inset; }";
 
     false_stylesheet = "QPushButton{background-color:rgb(255,100,100); color: rgb(90,200,200);\
             border-radius: 8px;  border: 1px groove gray; border-style: outset;}"
-            "QPushButton:pressed{background-color:rgb(140,140,140); border-style: inset; }";
+                       "QPushButton:pressed{background-color:rgb(140,140,140); border-style: inset; }";
 
     line_edit_stylesheet = "QLineEdit{color:rgb(90,200,200); background-color:rgb(100,100,100);\
             border-radius: 8px;  border: 1px groove gray; border-style: outset;}";
@@ -52,18 +51,22 @@ ObjectOutwardInfo::ObjectOutwardInfo()
     //main info
     main = new SizeInfo(600,450);
     int px, py;
-    int d_w ,d_h;
+    int d_w,d_h;
 
     //dashboard
-    d_w = 108; d_h = 372;
+    d_w = 108;
+    d_h = 372;
     left_dashbord = new PosSizeInfo(12,40,d_w,d_h);
     right_dashbord = new PosSizeInfo(480,40,d_w,d_h);
 
-    px = 12; py = 12;
+    px = 12;
+    py = 12;
     p_label = new PosSizeInfo(px,py,left_dashbord->w - 2 * px, 36);
-    px = 48; py = py + p_label->h + 12;
+    px = 48;
+    py = py + p_label->h + 12;
     phist_label = new PosSizeInfo(px,py,left_dashbord->w - 2 * px, 270);
-    px = 12 ; py = py + phist_label->h + 12;
+    px = 12 ;
+    py = py + phist_label->h + 12;
     pscore_label = new PosSizeInfo(px,py,left_dashbord->w - 2 * px,18);
 
 
@@ -71,9 +74,11 @@ ObjectOutwardInfo::ObjectOutwardInfo()
     //q_page
     int wid = 336, hei = 328;
     q_page = new PosSizeInfo((main->w - wid) / 2,84,wid,hei);
-    px = 12; py = 36;
-    next_label = new PosSizeInfo(px, py, q_page->w - 2 * px ,q_page->h - 2 * py);
-    px = 12; py = 24;
+    px = 12;
+    py = 36;
+    next_label = new PosSizeInfo(px, py, q_page->w - 2 * px,q_page->h - 2 * py);
+    px = 12;
+    py = 24;
     q_label = new PosSizeInfo(px,py,q_page->w - 2 * px,54);
     px = 48;
     py = q_label->y  + q_label->h + 24;
