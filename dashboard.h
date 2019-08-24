@@ -7,19 +7,21 @@
 #include "packageinfo.h"
 
 
-class DashBoard : public QFrame {
+class DashBoard : public QFrame
+{
     Q_OBJECT
-  public:
+public:
     DashBoard(QWidget * parent = nullptr);
     void initialObject();
     void setPlayerName(const QString&);
     void setPlayerHist(double);
     void setPlayerScore(const QString&);
     void setPlayerScore(int);
+    void getWindowSizeChange(int,int);
     QString  getScore();
     QString getPlayerName();
 
-  private :
+private :
     ObjectOutwardInfo * oi;
     QLabel * player_name;
     HistFrame * player_hist;

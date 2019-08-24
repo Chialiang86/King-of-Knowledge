@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/file">
-        <file>question.txt</file>
+        <file>src/file/question.txt</file>
+    </qresource>
+    <qresource prefix="/picture">
+        <file>src/picture/menu_view.png</file>
+        <file>src/picture/main_view.png</file>
     </qresource>
 </RCC>

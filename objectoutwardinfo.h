@@ -7,11 +7,19 @@
 #include <QPalette>
 #include <QColor>
 #include <QDebug>
+#include <QRect>
 #include "possize.h"
 
-class ObjectOutwardInfo {
-  public:
+
+class ObjectOutwardInfo
+{
+public:
     ObjectOutwardInfo();
+    void setMainwindowNewSize(int neww,int newh);
+    void setDashboardNewSize(int neww,int newh);
+    void setQPageNewSize(int neww,int newh);
+    void setMainwindowNewSize(QSize new_size);
+    int setFontPointSize(const QFont * f,double wratio);
 
     QFont * textshow;
     QFont * textinput;
@@ -30,6 +38,9 @@ class ObjectOutwardInfo {
     QString dashboard_stylesheet;
     QString hist_frame_stylesheet;
 
+    QPixmap background_img;
+    QPixmap menu_img;
+
     //menu page
     SizeInfo * menu;
     PosSizeInfo * pname_guide;
@@ -43,7 +54,6 @@ class ObjectOutwardInfo {
     //main page
     SizeInfo * main;
 
-
     PosSizeInfo * pk_label;
     PosSizeInfo * timer_label;
 
@@ -53,8 +63,6 @@ class ObjectOutwardInfo {
     PosSizeInfo * p_label;
     PosSizeInfo * pscore_label;
     PosSizeInfo * phist_label;
-
-
 
     //q_page
     PosSizeInfo * q_page;

@@ -3,9 +3,10 @@
 #include <QPushButton>
 #include "objectoutwardinfo.h"
 
-class QuestionButton : public QPushButton {
+class QuestionButton : public QPushButton
+{
     Q_OBJECT
-  public :
+public :
     QuestionButton(QWidget *parent);
     void setOption(const QString);
     void showTrueFalse();
@@ -14,7 +15,7 @@ class QuestionButton : public QPushButton {
     bool trueOrFalse();
     bool getEnabled();
 
-  private:
+private:
     bool isTrue;
     bool enabled;
     ObjectOutwardInfo * oi;
