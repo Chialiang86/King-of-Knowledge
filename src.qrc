@@ -5,5 +5,11 @@
     <qresource prefix="/picture">
         <file>src/picture/menu_view.png</file>
         <file>src/picture/main_view.png</file>
+        <file>src/picture/next_icon.png</file>
+        <file>src/picture/dash_01.jpg</file>
+        <file>src/picture/dash_02.jpg</file>
+        <file>src/picture/dash_03.jpg</file>
+        <file>src/picture/dash_04.jpg</file>
+        <file>src/picture/logo.png</file>
     </qresource>
 </RCC>

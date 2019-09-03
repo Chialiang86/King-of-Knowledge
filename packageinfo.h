@@ -20,6 +20,7 @@ const QString title_connect  = "connect";
 const QString title_next  = "next";
 const QString title_question  = "question";
 const QString title_player   = "player";
+const QString title_timeshow = "timeshow";
 const QString title_result   = "result";
 const QString title_gameover = "gameover";
 
@@ -120,6 +121,7 @@ public:
         title_name.append(title_next);
         title_name.append(title_connect);
         title_name.append(title_player);
+        title_name.append(title_timeshow);
         title_name.append(title_result);
         title_name.append(title_gameover);
         if(pack != ""){

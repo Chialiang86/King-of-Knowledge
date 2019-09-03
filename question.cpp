@@ -6,13 +6,14 @@ Question::Question(QWidget * parent) : QFrame(parent)
     this->setGeometry(oi->q_page->getRect());
     this->autoFillBackground();
     this->show();
-    this->setStyleSheet(oi->q_page_stylesheet);
+    //this->setStyleSheet(oi->q_page_stylesheet);
 
     question = new QLabel(this);
     question->setGeometry(oi->q_label->getRect());
     question->setFont(*oi->message);
     question->setAlignment(Qt::AlignCenter);
     question->setText(tr("這是題目"));
+    question->setStyleSheet(oi->show_stylesheet);
     question->show();
 
     answer1 = new QuestionButton(this);
@@ -34,7 +35,7 @@ Question::Question(QWidget * parent) : QFrame(parent)
     next = new QLabel(this);
     next->setGeometry(oi->next_label->getRect());
     next->setFont(*oi->next);
-    next->setStyleSheet(oi->label_stylesheet);
+    next->setStyleSheet(oi->next_label_stylesheet);
     next->setAlignment(Qt::AlignCenter);
     next->hide();
 

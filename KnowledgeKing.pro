@@ -8,8 +8,6 @@ QT       += core gui
 QT       += network
 
 
-
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = KnowledgeKing
@@ -36,7 +34,9 @@ SOURCES += \
     menuwindow.cpp \
     questionbutton.cpp \
     dashboard.cpp \
-    histframe.cpp
+    histframe.cpp \
+    timeshow.cpp \
+    choosepage.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,7 +48,9 @@ HEADERS += \
     possize.h \
     packageinfo.h \
     dashboard.h \
-    histframe.h
+    histframe.h \
+    timeshow.h \
+    choosepage.h
 
 FORMS += \
         mainwindow.ui

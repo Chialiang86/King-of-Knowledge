@@ -10,7 +10,7 @@ MenuWindow::MenuWindow(QWidget * parent,Package::PlayerKey key) : QWidget(parent
     menu_pal.setBrush(QPalette::Background,oi->menu_img);
     this->setPalette(menu_pal);
     this->setFont(QFont("Courier",14));
-    this->show();
+    this->hide();
 
     if(player_key == Package::server)
         serverActive();
@@ -26,6 +26,7 @@ void MenuWindow::serverActive()
     player_guide->setFont(*oi->textshow);
     player_guide->setText("Please input your name below.");
     player_guide->setAlignment(Qt::AlignCenter);
+    player_guide->setStyleSheet(oi->show_stylesheet);
     player_guide->show();
 
     player_name = new QLineEdit(this);
@@ -40,6 +41,7 @@ void MenuWindow::serverActive()
     ip_guide->setFont(*oi->textshow);
     ip_guide->setText("Please tell the client your IP.");
     ip_guide->setAlignment(Qt::AlignCenter);
+    ip_guide->setStyleSheet(oi->show_stylesheet);
     ip_guide->show();
 
     ip_show = new QLabel(this);
@@ -54,6 +56,7 @@ void MenuWindow::serverActive()
     start_guide->setFont(*oi->textshow);
     start_guide->setText("If ready, press START button.");
     start_guide->setAlignment(Qt::AlignCenter);
+    start_guide->setStyleSheet(oi->show_stylesheet);
     start_guide->hide();
 
     start_btn = new QPushButton(this);

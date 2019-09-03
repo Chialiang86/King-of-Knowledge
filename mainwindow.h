@@ -15,14 +15,18 @@
 #include <QTime>
 #include <QRandomGenerator>
 #include "musicinfo.h"
+#include "choosepage.h"
 #include "menuwindow.h"
 #include "question.h"
 #include "packageinfo.h"
 #include "dashboard.h"
+#include "timeshow.h"
 using namespace  Package;
 
 #define GOOD QMessageBox::information(this,"good","good")
 #define BAD QMessageBox::warning(this,"nope","BAD",QMessageBox::Yes|QMessageBox::Ok)
+#define TIME_UNIT 100
+#define MAX_COUNT_NUM 100
 
 namespace Ui {
 class MainWindow;
@@ -57,6 +61,9 @@ public slots:
     void getTrueFalse(const QByteArray&);
     void resizeEvent(QResizeEvent* event);
 
+    void getEditClicked();
+    void getPlayer1Clicked();
+    void getPlayer2Clicked();
 
 signals:
     void sendNewQuestion(const QString&);//client
@@ -68,7 +75,8 @@ private:
     bool changeEnabled;
 
     ObjectOutwardInfo *oi;
-    MenuWindow *menu;
+    ChoosePage * choose;
+    MenuWindow * menu;
     Question *q_page;
     QTimer *next_timer;
     QTimer *question_timer;
@@ -78,6 +86,7 @@ private:
     Package::PlayerKey role;
     DashBoard * left_dash;
     DashBoard * right_dash;
+    TimeShow * time_show;
 
 
     //client

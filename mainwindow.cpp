@@ -15,12 +15,15 @@ MainWindow::MainWindow(QWidget *parent,Package::PlayerKey key) :
     this->setAutoFillBackground(true);
     buildBase();
 
+    //choose mode
+    choose = new ChoosePage();
 
     //menu window info
     menu = new MenuWindow(nullptr,role);
-    connectSettingInit(role);
+
 
     //main window info
+    time_show = new TimeShow(this,MAX_COUNT_NUM);// 10 sec
     q_page = new Question(this);
     left_dash = new DashBoard(this);
     left_dash->setGeometry(oi->left_dashbord->getRect());
@@ -38,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent,Package::PlayerKey key) :
         next_timer->stop();
 
         question_timer = new QTimer();
-        question_timer->setInterval(10000);
+        question_timer->setInterval(TIME_UNIT);
         question_timer->stop();
 
         result_timer = new QTimer();
@@ -50,6 +53,10 @@ MainWindow::MainWindow(QWidget *parent,Package::PlayerKey key) :
         connect(question_timer,SIGNAL(timeout()),this,SLOT(serverQuestionTimeout()));
         connect(result_timer,SIGNAL(timeout()),this,SLOT(resultTimeout()));
     }
+
+    connect(choose->edit_btn,SIGNAL(clicked()),this,SLOT(getEditClicked()));
+    connect(choose->player1_btn,SIGNAL(clicked()),this,SLOT(getPlayer1Clicked()));
+    connect(choose->player2_btn,SIGNAL(clicked()),this,SLOT(getPlayer2Clicked()));
 
     connect(this,SIGNAL(sendQuestionShow()),q_page,SLOT(getQuestionShow()));
     connect(menu,SIGNAL(sendIPAddr(const QString&)),this,SLOT(getIPAddr(const QString&)));
@@ -67,11 +74,28 @@ void MainWindow::resizeEvent(QResizeEvent* event){
         q_page->setGeometry(oi->q_page->getRect());
         left_dash->setGeometry(oi->left_dashbord->getRect());
         right_dash->setGeometry(oi->right_dashbord->getRect());
+        time_show->setGeometry(oi->time_show_frame->getRect());
 
+        time_show->getWindowSizeChange(this->width(),this->height());
         q_page->getWindowSizeChange(this->width(),this->height());
         left_dash->getWindowSizeChange(this->width(),this->height());
         right_dash->getWindowSizeChange(this->width(),this->height());
     }
+}
+void MainWindow::getEditClicked()
+{
+    QMessageBox::information(this,"info","open edit page");
+}
+
+void MainWindow::getPlayer1Clicked()
+{
+    QMessageBox::information(this,"info","open player1 page");
+}
+
+void MainWindow::getPlayer2Clicked()
+{
+    menu->show();
+    connectSettingInit(role);
 }
 
 void MainWindow::openQuestionFile()
@@ -106,6 +130,7 @@ void MainWindow::connectSettingInit(Package::PlayerKey key)
     }else{ //client
         client = new QTcpSocket(this);
         connect(client,SIGNAL(readyRead()),this,SLOT(clientGetPackage()));
+        connect(client,SIGNAL(),this,SLOT(clientGetPackage()));
     }
 }
 
@@ -119,7 +144,12 @@ void MainWindow::getIPAddr(const QString& ip)
     client_addr_info.append(addr);
     //client 1
     client->connectToHost(ip,Package::port1);
-    client->write(PackageInfo::setPackage(Package::title_connect,menu->getPlayerName()));
+    if(client->waitForConnected(1000)){
+        client->write(PackageInfo::setPackage(Package::title_connect,menu->getPlayerName()));
+    }else{
+        QMessageBox::information(this,"error","Connect failed",QMessageBox::Ok);
+        client->disconnectFromHost();
+    }
 }
 
 void MainWindow::accept()
@@ -175,6 +205,13 @@ void MainWindow::parsePackage(const QString& pack,Package::PlayerKey key){
             QString score = pinfo.getInstruct().split(Package::comma).at(1);
             q_page->setGameOverText(winner, score);
         }
+        else if(pinfo.getTitle() == Package::title_timeshow){
+            if(pinfo.getInstruct() == QString::number(0)){
+                time_show->resetTime();
+            }else{
+                time_show->updateTime();
+            }
+        }
     }else{
         qDebug() << " client :" << pinfo.getTitle() << " " << pinfo.getInstruct() << endl;
         if(pinfo.getTitle() == Package::title_connect){
@@ -212,11 +249,22 @@ void MainWindow::nextTimeout() // to question
 void MainWindow::serverQuestionTimeout() // to result
 {
     //send to client done
-    question_timer->stop();
-    result_timer->start();
+    if(time_show->getTime() == 0){
 
-    client_socket->write(PackageInfo::setPackage(title_result,"show correct"));
-    q_page->reset();
+        question_timer->stop();
+        result_timer->start();
+
+        client_socket->write(PackageInfo::setPackage(title_result,"show correct"));
+        q_page->reset();
+
+        QString num = QString::number(time_show->getTime());
+        client_socket->write(PackageInfo::setPackage(title_timeshow,num));
+        time_show->resetTime();
+    }else{
+        time_show->updateTime();
+        QString num = QString::number(time_show->getTime());
+        client_socket->write(PackageInfo::setPackage(title_timeshow,num));
+    }
 }
 
 

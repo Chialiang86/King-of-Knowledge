@@ -8,23 +8,32 @@ HistFrame::HistFrame(QWidget * parent) : QFrame (parent)
 
     length = 2;
     graph = new QLabel(this);
-    graph->setGeometry(0,oi->phist_label->height() - length,oi->phist_label->width(),oi->phist_label->height());
+    graph->setGeometry(0,oi->phist_label->height() - length,oi->phist_label->width(),length);
     graph->setStyleSheet(oi->hist_stylesheet);
     graph->show();
 }
 
 void HistFrame::getSizeChanged()
 {
-    double ratio = static_cast<double>(length) / graph->height();
     length = static_cast<int>(ratio * this->height());
-    graph->setGeometry(0,this->height() - length,this->width(),this->height());
+    graph->setGeometry(0,this->height() - length,this->width(),this->length);
     graph->update();
 }
 
-void HistFrame::setHist(double ratio)
+double HistFrame::getRatio(int len, int height)
+{
+    return static_cast<double>(len) / height + 0.5;
+}
+
+void HistFrame::setRatio(double r)
+{
+    ratio = r;
+}
+
+void HistFrame::setHist()
 {
     length = static_cast<int>(ratio * this->height());
-    graph->setGeometry(0,this->height() - length,this->width(),this->height());
+    graph->setGeometry(0,this->height() - length,this->width(),this->length);
     graph->update();
 }
 
